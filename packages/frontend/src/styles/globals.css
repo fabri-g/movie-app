@@ -1,0 +1,18 @@
+/* styles/globals.css */
+html,
+body,
+#__next {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
+body {
+    background-color: #F6F4F3; 
+    font-family: sans-serif;
+}
+
+.Sidebar .ant-menu-item:first-child {
+  margin-top: 20px; 
+}
