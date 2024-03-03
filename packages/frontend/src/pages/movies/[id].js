@@ -1,13 +1,18 @@
 // pages/movie/[id].js
-import { Avatar, List, Card, Row, Col } from 'antd/lib';
+import { Avatar, List, Card, Row, Col, Space, Typography } from 'antd/lib';
 import  UserOutlined  from '@ant-design/icons/UserOutlined';
+import HeartOutlined  from '@ant-design/icons/HeartOutlined';
+import HeartFilled  from '@ant-design/icons/HeartFilled';
 import { gql } from '@apollo/client';
 import apolloClient from '../../lib/apolloClient';
+import { useFavorites } from '../../contexts/favoritesContext';
 
-// This query should be adjusted or expanded based on your GraphQL API schema
+const { Text } = Typography;
+
 const GET_MOVIE_DETAILS = gql`
   query GetMovieDetails($id: ID!) {
     movie(id: $id) {
+      id
       title
       releaseDate
       posterPath
@@ -47,6 +52,13 @@ export async function getServerSideProps(context) {
 }
 
 const MovieDetails = ({ movie }) => {
+  const { favorites, toggleFavorite } = useFavorites();
+  const isFavorited = favorites.includes(movie.id);
+  const handleToggleFavorite = (e) => {
+    e.stopPropagation(); // Prevent link navigation
+    toggleFavorite(movie.id);
+  };
+
     return (
         <>
             <Card hoverable>
@@ -56,12 +68,12 @@ const MovieDetails = ({ movie }) => {
                             <img
                                 alt={movie.title}
                                 src={`https://image.tmdb.org/t/p/w500${movie.posterPath}`}
-                                style={{ maxWidth: '100%', objectFit: 'cover' }}
+                                style={{ maxWidth: '85%', objectFit: 'cover' }}
                             />
                         </div>
                     </Col>
                     <Col span={16}>
-                        <h2>{movie.title}</h2>
+                        <h1>{movie.title}</h1>
                         <p>Release Date: {movie.releaseDate}</p>
                         <p>Rating: {movie.voteAverage}</p>
                         <p>Genres: {movie.genres?.map(genre => genre.name).join(', ') ?? 'N/A' }</p>
@@ -70,6 +82,16 @@ const MovieDetails = ({ movie }) => {
                         <p>Revenue: ${movie.revenue}</p>
                         <p>Production Companies: {movie.productionCompanies?.map(pc => pc.name).join(', ') ?? 'N/A'}</p>
                     </Col>
+                </Row>
+                <Row justify="start" style={{ marginTop: '20px' }}>
+                  <Space>
+                    {isFavorited ? (
+                      <HeartFilled onClick={handleToggleFavorite} style={{ color: 'red', cursor: 'pointer' }} />
+                    ) : (
+                      <HeartOutlined onClick={handleToggleFavorite} style={{ cursor: 'pointer' }} />
+                    )}
+                    <Text onClick={handleToggleFavorite} type="secondary" style={{ cursor: 'pointer' }} >Add to favorites</Text>
+                  </Space>
                 </Row>
             </Card>
             <div style={{ marginTop: '20px' }}>
