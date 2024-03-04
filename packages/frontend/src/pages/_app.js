@@ -18,12 +18,14 @@ const items = [
   getItem('Home', '/', <HomeOutlined />),
   getItem('Search', '/search', <SearchOutlined />),
   getItem('Movies', 'sub1', <PlaySquareOutlined />, [
-    getItem('All Movies', '/movies/all'),
-    getItem('By Genre', '/movies/genre'),
+    getItem('Popular', '/movies/popular'),
+    getItem('Now Playing', '/movies/now-playing'),
+    getItem('Top Rated', '/movies/top-rated'),
   ]),
   getItem('TV Shows', 'sub2', <VideoCameraOutlined />, [
-    getItem('All TV Shows', '/tv/all'),
-    getItem('By Genre', '/tv/genre'),
+    getItem('Popular', '/tv/popular'),
+    getItem('Now Playing', '/tv/now-playing'),
+    getItem('Top Rated', '/tv/top-rated'),
   ]),
   getItem('Favorites', '/favorites', <StarOutlined />),
 ];

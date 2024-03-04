@@ -6,6 +6,8 @@ const movieSchema = gql`
     movie(id: ID!): Movie
     searchMovies(title: String!): [Movie]
     popularMovies: [Movie]
+    nowPlayingMovies: [Movie]
+    topRatedMovies: [Movie]
   }
 
   type Movie {

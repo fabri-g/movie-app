@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { gql, useQuery } from '@apollo/client';
-import { Input, Row, Col, Card } from 'antd/lib';
+import { gql } from '@apollo/client';
+import { Input, Card } from 'antd/lib';
 import debounce from 'lodash.debounce';
 import apolloClient from '../lib/apolloClient';
-import Link from 'next/link';
 import MoviesGrid from '../components/moviesGrid';
 
 const { Meta } = Card;
