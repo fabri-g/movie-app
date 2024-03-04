@@ -22,7 +22,7 @@ const SEARCH_MOVIES = gql`
 
 const SEARCH_TV = gql`
   query SearchTV($name: String!) {
-    searchTV(name: $name) {
+    searchTv(name: $name) {
       id
       name
       firstAirDate
@@ -52,7 +52,7 @@ const SearchPage = () => {
         query: SEARCH_TV,
         variables: { name: query },
       });
-      setTvShows(tvResponse.data.searchTV);
+      setTvShows(tvResponse.data.searchTv);
     } else {
       setMovies([]);
       setTvShows([]);

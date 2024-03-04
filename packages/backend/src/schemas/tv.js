@@ -4,7 +4,7 @@ const { gql } = require('apollo-server-express');
 const tvSchema = gql`
   extend type Query {
     tv(id: ID!): TV
-    searchTv(title: String!): [TV]
+    searchTv(name: String!): [TV]
     popularTv: [TV]
     airingTodayTv: [TV]
     topRatedTv: [TV]
