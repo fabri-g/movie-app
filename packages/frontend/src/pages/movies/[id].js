@@ -54,15 +54,15 @@ export async function getServerSideProps(context) {
 
 const MovieDetails = ({ movie }) => {
   const { favorites, toggleFavorite } = useFavorites();
-  const isFavorited = favorites.includes(movie.id);
+  const isFavorite = (id, type) => favorites.some(fav => fav.id === id && fav.type === type);
 
   const formatCurrency = (amount) => `$${amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,').slice(0, -3)}`;
   const formatRuntime = (runtime) => `${Math.floor(runtime / 60)}h ${runtime % 60}m`;
   const votePercentage = Math.round(movie.voteAverage * 10);
 
-  const handleToggleFavorite = (e) => {
+  const handleFavoriteClick = (e, id) => {
     e.stopPropagation(); // Prevent link navigation
-    toggleFavorite(movie.id);
+    toggleFavorite({ id, type: 'movie' });
   };
 
     return (
@@ -86,7 +86,7 @@ const MovieDetails = ({ movie }) => {
                 <Text style={{ display: 'block', marginBottom: 16 }} >{movie.summary}</Text>
                 <Space align="center" style={{ marginBottom: 16 }}>
                   <Title level={4} style={{ marginRight: 8, marginTop: 8 }}>Rating</Title>
-                  <Progress type="circle" percent={votePercentage} width={65} />
+                  <Progress type="circle" percent={votePercentage} size={65} />
                 </Space>
                 <Text><strong>Budget:</strong> {formatCurrency(movie.budget)}</Text>
                 <Text><strong>Revenue:</strong> {formatCurrency(movie.revenue)}</Text>
@@ -97,10 +97,10 @@ const MovieDetails = ({ movie }) => {
           </Row>
           <Row justify="start" style={{ marginTop: '20px' }}>
             <Space>
-              {isFavorited ? (
-                <HeartFilled onClick={handleToggleFavorite} style={{ color: 'red', cursor: 'pointer' }} />
+              {isFavorite(movie.id, 'movie') ? (
+                <HeartFilled onClick={(e) => handleFavoriteClick(e, movie.id)} style={{ color: 'red', cursor: 'pointer' }} />
               ) : (
-                <HeartOutlined onClick={handleToggleFavorite} style={{ cursor: 'pointer' }} />
+                <HeartOutlined onClick={(e) => handleFavoriteClick(e, movie.id)} style={{ cursor: 'pointer' }} />
               )}
               <Text type="secondary">Add to favorites</Text>
             </Space>
