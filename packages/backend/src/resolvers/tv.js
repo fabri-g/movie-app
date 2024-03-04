@@ -54,13 +54,13 @@ const tvResolvers = {
       }
     },
 
-    searchTv: async (_, { title }) => {
+    searchTv: async (_, { name }) => {
       try {
         const response = await axios.get(`${TMDb_BASE_URL}/search/tv`, {
           params: {
             api_key: TMDb_API_KEY,
             language: 'en-US',
-            query: title,
+            query: name,
           }
         });
         return response.data.results.map(tv => ({
