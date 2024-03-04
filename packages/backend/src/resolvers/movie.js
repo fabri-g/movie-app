@@ -24,7 +24,6 @@ const movieResolvers = {
 
         const movie = movieResponse.data;
         const creditsData = creditsResponse.data;
-        
          // Transform to match GraphQL schema
          return {
           id: movie.id,
@@ -32,16 +31,23 @@ const movieResolvers = {
           releaseDate: movie.release_date,
           summary: movie.overview,
           posterPath: movie.poster_path,
-          backdropPath: movie.backdrop_path,
-          genreIds: movie.genre_ids,
-          popularity: movie.popularity,
           voteAverage: movie.vote_average,
-          voteCount: movie.vote_count,
+          budget: movie.budget,
+          revenue: movie.revenue,
+          runtime: movie.runtime,
+          productionCompanies: movie.production_companies.map(company => ({
+            name: company.name,
+          })),
+          productionCountries: movie.production_countries.map(country => ({
+            name: country.name,
+          })),
           cast: creditsData.cast.map(castMember => ({
-            id: castMember.id,
             name: castMember.name,
             character: castMember.character,
             profilePath: castMember.profile_path,
+          })),
+          genres: movie.genres.map(genre => ({
+            name: genre.name
           })),
         };
       } catch (error) {
@@ -68,13 +74,8 @@ const movieResolvers = {
           id: movie.id,
           title: movie.title,
           releaseDate: movie.release_date,
-          summary: movie.overview,
           posterPath: movie.poster_path,
-          backdropPath: movie.backdrop_path,
-          genreIds: movie.genre_ids,
-          popularity: movie.popularity,
           voteAverage: movie.vote_average,
-          voteCount: movie.vote_count,
         }));
       } catch (error) {
         console.error("Failed to search movies:", error);
@@ -96,17 +97,58 @@ const movieResolvers = {
           id: movie.id,
           title: movie.title,
           releaseDate: movie.release_date,
-          summary: movie.overview,
           posterPath: movie.poster_path,
-          backdropPath: movie.backdrop_path,
-          genreIds: movie.genre_ids,
-          popularity: movie.popularity,
           voteAverage: movie.vote_average,
-          voteCount: movie.vote_count,
         }));
       } catch (error) {
         console.error("Failed to fetch popular movies:", error);
         throw new Error("Failed to fetch popular movies.");
+      }
+    },
+
+    nowPlayingMovies: async () => {
+      try {
+        const response = await axios.get(`${TMDb_BASE_URL}/movie/now_playing`, {
+          params: {
+            api_key: TMDb_API_KEY,
+            language: 'en-US',
+            page: 1
+          }
+        });
+        // Transform to match GraphQL schema
+        return response.data.results.map(movie => ({
+          id: movie.id,
+          title: movie.title,
+          releaseDate: movie.release_date,
+          posterPath: movie.poster_path,
+          voteAverage: movie.vote_average,
+        }));
+      } catch (error) {
+        console.error("Failed to fetch now playing movies:", error);
+        throw new Error("Failed to fetch now playing movies.");
+      }
+    },
+
+    topRatedMovies: async () => {
+      try {
+        const response = await axios.get(`${TMDb_BASE_URL}/movie/top_rated`, {
+          params: {
+            api_key: TMDb_API_KEY,
+            language: 'en-US',
+            page: 1
+          }
+        });
+        // Transform to match GraphQL schema
+        return response.data.results.map(movie => ({
+          id: movie.id,
+          title: movie.title,
+          releaseDate: movie.release_date,
+          posterPath: movie.poster_path,
+          voteAverage: movie.vote_average,
+        }));
+      } catch (error) {
+        console.error("Failed to fetch top rated movies:", error);
+        throw new Error("Failed to fetch top rated movies.");
       }
     },
   },

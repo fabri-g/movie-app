@@ -1,8 +1,8 @@
-// frontend/pages/index.js
+// frontend/pages/movies/popular.js
 import React from 'react';
 import { gql, useQuery } from '@apollo/client';
-import apolloClient from '../lib/apolloClient';
-import MoviesGrid from '../components/moviesGrid';
+import apolloClient from '../../lib/apolloClient';
+import MoviesGrid from '../../components/moviesGrid';
 
 const GET_POPULAR_MOVIES = gql`
   query GetPopularMovies {
@@ -16,7 +16,7 @@ const GET_POPULAR_MOVIES = gql`
   }
 `;
 
-function Home() {
+function PopularPage() {
   const { data, loading, error } = useQuery(GET_POPULAR_MOVIES, { client: apolloClient });
 
   if (loading) return <p>Loading...</p>;
@@ -30,4 +30,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default PopularPage;

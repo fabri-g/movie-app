@@ -1,6 +1,7 @@
 // /src/schemas/index.js
 const { gql } = require('apollo-server-express');
 const movieSchema = require('./movie');
+const tvSchema = require('./tv');
 
 // A root schema to hold the base Query and Mutation type
 const rootSchema = gql`
@@ -16,4 +17,5 @@ const rootSchema = gql`
 module.exports = [
   rootSchema,
   movieSchema,
+  tvSchema,
 ];
