@@ -9,15 +9,15 @@ const { Meta } = Card;
 
 const MoviesGrid = ({ movies }) => {
     const { favorites, toggleFavorite } = useFavorites();
-    
-    const isFavorite = (id) => favorites.includes(id);
-  
+
+    const isFavorite = (id, type) => favorites.some(fav => fav.id === id && fav.type === type);
+
     const handleFavoriteClick = (e, id) => {
         e.preventDefault(); // Prevent default action
         e.stopPropagation(); // Prevent event from bubbling up to parent elements
-        toggleFavorite(id);
+        toggleFavorite({ id, type: 'movie' });
     };
-    
+
     return (
       <Row gutter={[16, 16]} style={{ padding: '0 50px' }}>
         {movies.map(({ id, title, releaseDate, posterPath, voteAverage }) => (
@@ -28,7 +28,7 @@ const MoviesGrid = ({ movies }) => {
                   style={{ width: 240 }}
                   cover={<img alt={title} src={`https://image.tmdb.org/t/p/w500${posterPath}`} />}
                   actions={[
-                    isFavorite(id) ? (
+                    isFavorite(id, 'movie') ? (
                       <HeartFilled key="filled" onClick={(e) => handleFavoriteClick(e, id)} />
                     ) : (
                       <HeartOutlined key="outline" onClick={(e) => handleFavoriteClick(e, id)} />
@@ -44,5 +44,5 @@ const MoviesGrid = ({ movies }) => {
       </Row>
     );
   };
-  
+
   export default MoviesGrid;

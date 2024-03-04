@@ -12,12 +12,13 @@ export const FavoritesProvider = ({ children }) => {
     setFavorites(favs);
   }, []);
 
-  const toggleFavorite = (id) => {
+  const toggleFavorite = (item) => {
     let currentFavorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-    if (currentFavorites.includes(id)) {
-      currentFavorites = currentFavorites.filter(favId => favId !== id);
+    const index = currentFavorites.findIndex(fav => fav.id === item.id && fav.type === item.type);
+    if (index > -1) {
+      currentFavorites.splice(index, 1); // Remove if already a favorite
     } else {
-      currentFavorites.push(id);
+      currentFavorites.push(item);
     }
     localStorage.setItem('favorites', JSON.stringify(currentFavorites));
     setFavorites(currentFavorites);

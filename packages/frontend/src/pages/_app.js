@@ -24,8 +24,9 @@ const items = [
   ]),
   getItem('TV Shows', 'sub2', <VideoCameraOutlined />, [
     getItem('Popular', '/tv/popular'),
-    getItem('Now Playing', '/tv/now-playing'),
+    getItem('Airing Today', '/tv/airing-today'),
     getItem('Top Rated', '/tv/top-rated'),
+    getItem('On The Air', '/tv/on-the-air'),
   ]),
   getItem('Favorites', '/favorites', <StarOutlined />),
 ];
