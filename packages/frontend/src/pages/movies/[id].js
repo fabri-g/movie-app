@@ -6,6 +6,7 @@ import HeartFilled  from '@ant-design/icons/HeartFilled';
 import { gql } from '@apollo/client';
 import apolloClient from '../../lib/apolloClient';
 import { useFavorites } from '../../contexts/favoritesContext';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const { Text, Title } = Typography;
 
@@ -54,6 +55,7 @@ export async function getServerSideProps(context) {
 
 const MovieDetails = ({ movie }) => {
   const { favorites, toggleFavorite } = useFavorites();
+  const { isAuthenticated, loginWithRedirect } = useAuth0();
   const isFavorite = (id, type) => favorites.some(fav => fav.id === id && fav.type === type);
 
   const formatCurrency = (amount) => `$${amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,').slice(0, -3)}`;
@@ -62,7 +64,11 @@ const MovieDetails = ({ movie }) => {
 
   const handleFavoriteClick = (e, id) => {
     e.stopPropagation(); // Prevent link navigation
-    toggleFavorite({ id, type: 'movie' });
+    if (isAuthenticated) {
+      toggleFavorite({ id, type: 'movie' });
+    } else {
+      loginWithRedirect();
+    }
   };
 
     return (
