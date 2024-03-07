@@ -4,18 +4,24 @@ import HeartOutlined from '@ant-design/icons/HeartOutlined';
 import HeartFilled from '@ant-design/icons/HeartFilled';
 import Link from 'next/link';
 import { useFavorites } from '../contexts/favoritesContext';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const { Meta } = Card;
 
 const MoviesGrid = ({ movies }) => {
     const { favorites, toggleFavorite } = useFavorites();
+    const { isAuthenticated, loginWithRedirect } = useAuth0();
 
     const isFavorite = (id, type) => favorites.some(fav => fav.id === id && fav.type === type);
 
     const handleFavoriteClick = (e, id) => {
         e.preventDefault(); // Prevent default action
         e.stopPropagation(); // Prevent event from bubbling up to parent elements
-        toggleFavorite({ id, type: 'movie' });
+        if (isAuthenticated) {
+          toggleFavorite({ id, type: 'movie' });
+        } else {
+          loginWithRedirect();
+        }
     };
 
     return (
