@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-
 const FavoritesContext = createContext();
 
 export const useFavorites = () => useContext(FavoritesContext);
