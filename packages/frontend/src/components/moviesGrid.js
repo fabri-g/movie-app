@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { useFavorites } from '../contexts/favoritesContext';
 import { useAuth0 } from '@auth0/auth0-react';
 
-
 const { Meta } = Card;
 const noImageSrc = '/no-image.svg'
 
