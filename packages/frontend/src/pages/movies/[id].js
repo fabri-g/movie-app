@@ -9,6 +9,7 @@ import { useFavorites } from '../../contexts/favoritesContext';
 import { useAuth0 } from '@auth0/auth0-react';
 
 const { Text, Title } = Typography;
+const noImageSrc = '/no-image.svg'
 
 const GET_MOVIE_DETAILS = gql`
   query GetMovieDetails($id: ID!) {
@@ -76,11 +77,17 @@ const MovieDetails = ({ movie }) => {
         <Card hoverable>
           <Row gutter={[16, 16]}>
             <Col span={8}>
-              <img
-                alt={movie.title}
-                src={`https://image.tmdb.org/t/p/w500${movie.posterPath}`}
-                style={{ width: '81%', height: 'auto', display: 'block' }}
-              />
+              {movie.posterPath ? (
+                <img
+                  alt={movie.title}
+                  src={`https://image.tmdb.org/t/p/w500${movie.posterPath}`}
+                  style={{ width: '81%', height: 'auto', display: 'block'  }}
+                />
+              ) : (
+                <div style={{ backgroundColor: '#dbdbdb', width: '81%', paddingTop: '135%', position: 'relative' }}>
+                  <img src={noImageSrc} alt="No image available" style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', maxWidth: '50%', maxHeight: '50%' }} />
+                </div>
+              )}
             </Col>
             <Col span={16}>
               <Space direction="vertical" size="middle">
