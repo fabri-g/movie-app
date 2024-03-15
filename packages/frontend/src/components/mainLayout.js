@@ -1,5 +1,5 @@
 // components/mainLayout.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Layout, Menu, Avatar } from 'antd/lib';
 import { useAuth0 } from '@auth0/auth0-react';
@@ -22,6 +22,7 @@ const MainLayout = ({ children }) => {
   const [collapsed, setCollapsed] = useState(false);
   const router = useRouter();
   const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
+  const { getAccessTokenSilently } = useAuth0();
 
   const items = [
     getItem('Home', '/', <HomeOutlined />),
@@ -59,6 +60,21 @@ const MainLayout = ({ children }) => {
   };
 
   const combinedItems = [...authItems, ...items];
+
+  useEffect(() => {
+    const fetchAccessToken = async () => {
+      try {
+        const accessToken = await getAccessTokenSilently();
+        console.log("Access Token:", accessToken);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    if (isAuthenticated) {
+      fetchAccessToken();
+    }
+  }, [isAuthenticated, getAccessTokenSilently]);
 
   return (
     <FavoritesProvider>

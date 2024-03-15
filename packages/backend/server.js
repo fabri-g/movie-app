@@ -1,14 +1,20 @@
-// Import necessary libraries
+// server.js
+require('dotenv').config();
 const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
-require('dotenv').config();
+const userRoutes = require('./src/routes/user');
 
 // Placeholder imports for typeDefs and resolvers which we will create later
 const typeDefs = require('./src/schemas');
 const resolvers = require('./src/resolvers');
 
+const app = express();
+app.use(express.json()); // Middleware to parse JSON bodies
+
+//Routes
+app.use('/api/user', userRoutes);
+
 async function startApolloServer(typeDefs, resolvers) {
-  const app = express();
   const server = new ApolloServer({
     typeDefs,
     resolvers,
@@ -20,7 +26,7 @@ async function startApolloServer(typeDefs, resolvers) {
   server.applyMiddleware({ app });
 
   const PORT = process.env.PORT || 4000;
-  
+
   // Start the server
   app.listen(PORT, () => {
     console.log(`Server ready at http://localhost:${PORT}${server.graphqlPath}`);
