@@ -1,30 +1,60 @@
+// contexts/favoritesContext.js
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useAuth0 } from '@auth0/auth0-react';
+import axios from 'axios';
+
 const FavoritesContext = createContext();
 
 export const useFavorites = () => useContext(FavoritesContext);
 
 export const FavoritesProvider = ({ children }) => {
+  const { isAuthenticated, getAccessTokenSilently, loginWithRedirect} = useAuth0();
   const [favorites, setFavorites] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const favs = JSON.parse(localStorage.getItem('favorites') || '[]');
-    setFavorites(favs);
-  }, []);
+    fetchFavorites();
+  }, [isAuthenticated, getAccessTokenSilently]);
 
-  const toggleFavorite = (item) => {
-    let currentFavorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-    const index = currentFavorites.findIndex(fav => fav.id === item.id && fav.type === item.type);
-    if (index > -1) {
-      currentFavorites.splice(index, 1); // Remove if already a favorite
-    } else {
-      currentFavorites.push(item);
+  const fetchFavorites = async () => {
+    if (!isAuthenticated) return;
+    setLoading(true);
+    try {
+      const accessToken = await getAccessTokenSilently();
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_API}/api/user/favorites`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      setFavorites(response.data.favorites || []);
+      setLoading(false);
+    } catch (e) {
+      console.error('Error fetching favorites:', e);
+      setLoading(false);
     }
-    localStorage.setItem('favorites', JSON.stringify(currentFavorites));
-    setFavorites(currentFavorites);
+  };
+
+  const toggleFavorite =  async (item) => {
+    if (!isAuthenticated) {
+      loginWithRedirect();
+      return;
+    }
+
+    try {
+      const accessToken = await getAccessTokenSilently();
+      await axios.patch(`${process.env.NEXT_PUBLIC_BACKEND_API}/api/user/favorites`, item, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      fetchFavorites(); // Refresh favorites list
+    } catch (e) {
+      console.error('Error updating favorites:', e);
+    }
   };
 
   return (
-    <FavoritesContext.Provider value={{ favorites, toggleFavorite }}>
+    <FavoritesContext.Provider value={{ favorites, toggleFavorite, loading }}>
       {children}
     </FavoritesContext.Provider>
   );

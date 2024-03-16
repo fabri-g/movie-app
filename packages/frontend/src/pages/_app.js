@@ -8,7 +8,11 @@ function MovieApp ({ Component, pageProps }) {
     <Auth0Provider
       domain={process.env.NEXT_PUBLIC_AUTH0_DOMAIN}
       clientId={process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID}
-      redirectUri={typeof window !== 'undefined' && window.location.origin}
+      authorizationParams={{
+        redirect_uri: process.env.NEXT_PUBLIC_AUTH0_REDIRECT_URI,
+        audience: process.env.NEXT_PUBLIC_AUTH0_AUDIENCE,
+        scope:"openid profile email read:users update:users"
+      }}
     >
       <MainLayout>
         <Component {...pageProps} />
