@@ -1,6 +1,7 @@
 // server.js
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
 const { ApolloServer } = require('apollo-server-express');
 const userRoutes = require('./src/routes/user');
 
@@ -10,6 +11,11 @@ const resolvers = require('./src/resolvers');
 
 const app = express();
 app.use(express.json()); // Middleware to parse JSON bodies
+
+// Enable CORS for all requests
+app.use(cors({
+  origin: `${process.env.FRONTEND_URL}` // Adjust this to your frontend's origin
+}));
 
 //Routes
 app.use('/api/user', userRoutes);

@@ -59,41 +59,82 @@ async function getManagementApiAccessToken() {
   }
 }
 
-// Update user metadata with favorites
-router.post('/favorites', async (req, res) => {
-  const userId = req.user.sub;
-  const { favorites } = req.body;
+// Fetch user metadata with favorites
+router.get('/favorites', async (req, res) => {
+  const { sub: userId } = req.user;
 
-  if (!userId || !favorites) {
-    return res.status(400).send({ message: 'Missing userId or favorites in request.' });
+  if (!userId) {
+    return res.status(400).send({ message: 'Missing userId in request.' });
   }
 
   const accessToken = await getManagementApiAccessToken();
   if (!accessToken) {
-    return res.status(500).send({ message: 'Could not get access token' });
+    return res.status(500).send({ message: 'Could not get access token for Management API' });
   }
-
-  const options = {
-    method: 'PATCH',
-    url: `https://${process.env.AUTH0_DOMAIN}/api/v2/users/${encodeURIComponent(userId)}`,
-    headers: {
-      authorization: `Bearer ${accessToken}`,
-      'content-type': 'application/json'
-    },
-    data: {
-      user_metadata: { favorites }
-    }
-  };
 
   try {
-    const response = await axios.request(options);
+    // Fetch current user's metadata to get favorites
+    const response = await axios.get(`https://${process.env.AUTH0_DOMAIN}/api/v2/users/${encodeURIComponent(userId)}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
     console.log(response.data);
-    res.status(200).send({ message: 'Favorites updated successfully.', data: response.data });
+    const favorites = response.data.user_metadata?.favorites || [];
+    res.send({ favorites });
   } catch (error) {
-    console.error('Error updating favorites:', error);
-    res.status(500).send({ message: 'Failed to update favorites', error: error.message });
+    console.error('Error fetching user metadata:', error);
+    res.status(500).send({ message: 'Error fetching favorites', error: error.message });
+  }
+});
+
+// Update user metadata with favorites
+router.patch('/favorites', async (req, res) => {
+  const { sub: userId } = req.user;
+  const item = req.body;
+
+  if (!userId || !item) {
+    return res.status(400).send({ message: 'Missing userId or item in request.' });
   }
 
+  const accessToken = await getManagementApiAccessToken();
+  if (!accessToken) {
+    return res.status(500).send({ message: 'Could not get access token for Management API' });
+  }
+
+  try {
+    // Fetch current user's metadata
+    const userResponse = await axios.get(`https://${process.env.AUTH0_DOMAIN}/api/v2/users/${encodeURIComponent(userId)}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    let favorites = userResponse.data.user_metadata?.favorites || [];
+    const itemIndex = favorites.findIndex(fav => fav.id === item.id && fav.type === item.type);
+
+    // Determine whether to add or remove the item
+    if (itemIndex === -1) {
+      favorites.push(item); // Add item to favorites
+    } else {
+      favorites.splice(itemIndex, 1); // Remove item from favorites
+    }
+
+    // Update user's metadata with new favorites list
+    await axios.patch(`https://${process.env.AUTH0_DOMAIN}/api/v2/users/${encodeURIComponent(userId)}`, {
+      user_metadata: { favorites },
+    }, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    res.send({ message: 'Favorites updated successfully' });
+  } catch (error) {
+    console.error('Error updating user metadata:', error);
+    res.status(500).send({ message: 'Error updating favorites', error: error.message });
+  }
 });
 
 module.exports = router;

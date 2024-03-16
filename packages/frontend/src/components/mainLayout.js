@@ -61,21 +61,6 @@ const MainLayout = ({ children }) => {
 
   const combinedItems = [...authItems, ...items];
 
-  useEffect(() => {
-    const fetchAccessToken = async () => {
-      try {
-        const accessToken = await getAccessTokenSilently();
-        console.log("Access Token:", accessToken);
-      } catch (e) {
-        console.error(e);
-      }
-    };
-
-    if (isAuthenticated) {
-      fetchAccessToken();
-    }
-  }, [isAuthenticated, getAccessTokenSilently]);
-
   return (
     <FavoritesProvider>
       <Layout style={{ minHeight: '100vh' }}>
