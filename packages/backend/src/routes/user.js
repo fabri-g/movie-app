@@ -79,7 +79,6 @@ router.get('/favorites', async (req, res) => {
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    console.log(response.data);
     const favorites = response.data.user_metadata?.favorites || [];
     res.send({ favorites });
   } catch (error) {

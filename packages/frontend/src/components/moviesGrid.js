@@ -12,10 +12,7 @@ const noImageSrc = '/no-image.svg'
 const MoviesGrid = ({ movies }) => {
   const { favorites, toggleFavorite, loading } = useFavorites();
   const { isAuthenticated, loginWithRedirect } = useAuth0();
-  const isFavorite = (id, type) => {
-    const result = favorites.some(fav => fav.id.toString() === id.toString() && fav.type === type);
-  return result;
-  };
+  const isFavorite = (id, type) => favorites.some(fav => fav.id.toString() === id.toString() && fav.type === type);
 
   const handleFavoriteClick = (e, id) => {
       e.preventDefault(); // Prevent default action
@@ -27,7 +24,7 @@ const MoviesGrid = ({ movies }) => {
       }
   };
 
-  if (loading) {
+  if (loading && isAuthenticated) {
     return <div>Loading favorites...</div>;
   }
 

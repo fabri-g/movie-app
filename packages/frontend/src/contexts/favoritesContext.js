@@ -26,7 +26,6 @@ export const FavoritesProvider = ({ children }) => {
           Authorization: `Bearer ${accessToken}`,
         },
       });
-      console.log(response.data);
       setFavorites(response.data.favorites || []);
       setLoading(false);
     } catch (e) {
@@ -34,11 +33,6 @@ export const FavoritesProvider = ({ children }) => {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    console.log(favorites);
-  }, [favorites]);
-
 
   const toggleFavorite =  async (item) => {
     if (!isAuthenticated) {
