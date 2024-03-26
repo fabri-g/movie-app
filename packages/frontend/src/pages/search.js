@@ -12,8 +12,8 @@ const SearchPage = () => {
   const [movies, setMovies] = useState([]);
   const [tvShows, setTvShows] = useState([]);
 
-   // Debounced search function
-   const debouncedSearch = debounce(async (query) => {
+  // Debounced search function
+  const debouncedSearch = debounce(async (query) => {
     if (query) {
       // Search Movies
       const moviesResponse = await apolloClient.query({
