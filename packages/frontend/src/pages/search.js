@@ -1,44 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { gql } from '@apollo/client';
-import { Input, Card } from 'antd/lib';
+import { Input } from 'antd/lib';
 import debounce from 'lodash.debounce';
 import apolloClient from '../lib/apolloClient';
 import MoviesGrid from '../components/moviesGrid';
 import TvGrid from '../components/tvGrid';
-
-const { Meta } = Card;
-
-const SEARCH_MOVIES = gql`
-  query SearchMovies($title: String!) {
-    searchMovies(title: $title) {
-      id
-      title
-      releaseDate
-      posterPath
-      voteAverage
-    }
-  }
-`;
-
-const SEARCH_TV = gql`
-  query SearchTV($name: String!) {
-    searchTv(name: $name) {
-      id
-      name
-      firstAirDate
-      posterPath
-      voteAverage
-    }
-  }
-`;
+import { SEARCH_MOVIES } from '../graphql/queries/searchMoviesQuery';
+import { SEARCH_TV } from '../graphql/queries/searchTvQuery';
 
 const SearchPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [movies, setMovies] = useState([]);
   const [tvShows, setTvShows] = useState([]);
 
-   // Debounced search function
-   const debouncedSearch = debounce(async (query) => {
+  // Debounced search function
+  const debouncedSearch = debounce(async (query) => {
     if (query) {
       // Search Movies
       const moviesResponse = await apolloClient.query({

@@ -3,18 +3,7 @@ import React from 'react';
 import { gql, useQuery } from '@apollo/client';
 import apolloClient from '../../lib/apolloClient';
 import TvGrid from '../../components/tvGrid';
-
-const GET_TOP_RATED_TV = gql`
-  query GetTopRatedTv {
-    topRatedTv {
-      id
-      name
-      firstAirDate
-      posterPath
-      voteAverage
-    }
-  }
-`;
+import { GET_TOP_RATED_TV } from '../../graphql/queries/topRatedTvQuery';
 
 function TopRatedPage() {
   const { data, loading, error } = useQuery(GET_TOP_RATED_TV, { client: apolloClient });

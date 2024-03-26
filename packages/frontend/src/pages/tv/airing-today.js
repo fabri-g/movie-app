@@ -1,20 +1,9 @@
 // frontend/pages/tv/airing-today.js
 import React from 'react';
-import { gql, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import apolloClient from '../../lib/apolloClient';
 import TvGrid from '../../components/tvGrid';
-
-const GET_AIRING_TODAY_TV = gql`
-  query GetAiringTodayTv {
-    airingTodayTv {
-      id
-      name
-      firstAirDate
-      posterPath
-      voteAverage
-    }
-  }
-`;
+import { GET_AIRING_TODAY_TV } from '../../graphql/queries/airingTodayTvQuery';
 
 function AiringTodayPage() {
   const { data, loading, error } = useQuery(GET_AIRING_TODAY_TV, { client: apolloClient });

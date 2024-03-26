@@ -1,20 +1,9 @@
 //frontend/pages/movies/top-rated.js
 import React from 'react';
-import { gql, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import apolloClient from '../../lib/apolloClient';
 import MoviesGrid from '../../components/moviesGrid';
-
-const GET_TOPRATED_MOVIES = gql`
-    query GetTopRatedMovies {
-        topRatedMovies {
-            id
-            title
-            releaseDate
-            posterPath
-            voteAverage
-        }
-    }
-`;
+import { GET_TOPRATED_MOVIES } from '../../graphql/queries/topRatedMoviesQuery';
 
 function TopRatedPage() {
     const { data, loading, error } = useQuery(GET_TOPRATED_MOVIES, { client: apolloClient });

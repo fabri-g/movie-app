@@ -1,20 +1,9 @@
 // frontend/pages/movies/popular.js
 import React from 'react';
-import { gql, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import apolloClient from '../../lib/apolloClient';
 import MoviesGrid from '../../components/moviesGrid';
-
-const GET_POPULAR_MOVIES = gql`
-  query GetPopularMovies {
-    popularMovies {
-      id
-      title
-      releaseDate
-      posterPath
-      voteAverage
-    }
-  }
-`;
+import { GET_POPULAR_MOVIES } from '../../graphql/queries/popularMoviesQuery';
 
 function PopularPage() {
   const { data, loading, error } = useQuery(GET_POPULAR_MOVIES, { client: apolloClient });

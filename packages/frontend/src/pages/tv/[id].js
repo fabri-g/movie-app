@@ -3,42 +3,13 @@ import {Avatar, List, Card, Row, Col, Space, Typography, Progress} from 'antd/li
 import UserOutlined from '@ant-design/icons/UserOutlined';
 import HeartOutlined from '@ant-design/icons/HeartOutlined';
 import HeartFilled from '@ant-design/icons/HeartFilled';
-import {gql} from '@apollo/client';
 import apolloClient from '../../lib/apolloClient';
 import {useFavorites} from '../../contexts/favoritesContext';
 import { useAuth0 } from '@auth0/auth0-react';
+import {GET_TV_DETAILS} from '../../graphql/queries/tvDetailsQuery';
 
 const {Text, Title} = Typography;
 const noImageSrc = '/no-image.svg'
-
-const GET_TV_DETAILS = gql`
-  query GetTvDetails($id: ID!) {
-    tv(id: $id) {
-      id
-      name
-      firstAirDate
-      summary
-      posterPath
-      voteAverage
-      numberOfSeasons
-      numberOfEpisodes
-      genres {
-        name
-      }
-      createdBy {
-        name
-      }
-      productionCountries {
-        name
-      }
-      cast {
-        name
-        character
-        profilePath
-      }
-    }
-  }
-`;
 
 export async function getServerSideProps(context) {
   try {
