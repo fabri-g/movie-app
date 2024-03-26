@@ -3,43 +3,13 @@ import { Avatar, List, Card, Row, Col, Space, Typography, Progress } from 'antd/
 import  UserOutlined  from '@ant-design/icons/UserOutlined';
 import HeartOutlined  from '@ant-design/icons/HeartOutlined';
 import HeartFilled  from '@ant-design/icons/HeartFilled';
-import { gql } from '@apollo/client';
 import apolloClient from '../../lib/apolloClient';
 import { useFavorites } from '../../contexts/favoritesContext';
 import { useAuth0 } from '@auth0/auth0-react';
+import { GET_MOVIE_DETAILS } from '../../graphql/queries/movieDetailsQuery';
 
 const { Text, Title } = Typography;
 const noImageSrc = '/no-image.svg'
-
-const GET_MOVIE_DETAILS = gql`
-  query GetMovieDetails($id: ID!) {
-    movie(id: $id) {
-      id
-      title
-      releaseDate
-      summary
-      posterPath
-      voteAverage
-      budget
-      revenue
-      runtime
-      genres {
-        name
-      }
-      productionCompanies {
-        name
-      }
-      productionCountries {
-        name
-      }
-      cast {
-        name
-        character
-        profilePath
-      }
-    }
-  }
-`;
 
 export async function getServerSideProps(context) {
   const { id } = context.params;

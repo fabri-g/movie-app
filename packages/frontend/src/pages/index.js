@@ -1,57 +1,13 @@
 // frontend/pages/index.js
 import React from 'react';
-import { gql, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import apolloClient from '../lib/apolloClient';
 import MoviesGrid from '../components/moviesGrid';
 import TvGrid from '../components/tvGrid';
-
-const GET_POPULAR_MOVIES = gql`
-  query GetPopularMovies {
-    popularMovies {
-      id
-      title
-      releaseDate
-      posterPath
-      voteAverage
-    }
-  }
-`;
-
-const GET_NOWPLAYING_MOVIES = gql`
-  query GetNowPlayingMovies {
-    nowPlayingMovies {
-      id
-      title
-      releaseDate
-      posterPath
-      voteAverage
-    }
-  }
-`;
-
-const GET_POPULAR_TV = gql`
-  query GetPopularTv {
-    popularTv {
-      id
-      name
-      firstAirDate
-      posterPath
-      voteAverage
-    }
-  }
-`;
-
-const GET_ON_THE_AIR_TV = gql`
-  query GetOnTheAirTv {
-    onTheAirTv {
-      id
-      name
-      firstAirDate
-      posterPath
-      voteAverage
-    }
-  }
-`;
+import { GET_POPULAR_MOVIES } from '../graphql/queries/popularMoviesQuery';
+import { GET_NOWPLAYING_MOVIES } from '../graphql/queries/nowPlayingMoviesQuery';
+import { GET_POPULAR_TV } from '../graphql/queries/popularTvQuery';
+import { GET_ON_THE_AIR_TV } from '../graphql/queries/onTheAirTvQuery';
 
 function Home() {
   const { data: popularMoviesData, loading: loadingPopularMovies, error: errorPopularMovies } = useQuery(GET_POPULAR_MOVIES, { client: apolloClient });
