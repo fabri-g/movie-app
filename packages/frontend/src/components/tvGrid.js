@@ -29,7 +29,7 @@ const TvGrid = ({ tv }) => {
   }
   return (
     <Row gutter={[16, 16]} style={{ padding: '0 50px' }}>
-      {tv.map(({ id, name, firstAirDate, posterPath, voteAverage }) => (
+      {tv && tv.map(({ id, name, firstAirDate, posterPath, voteAverage }) => (
         <Col key={id} span={6} style={{ display: 'flex', justifyContent: 'center' }}>
           <Link href={`/tv/${id}`} passHref>
             <Card

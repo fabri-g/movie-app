@@ -30,7 +30,7 @@ const MoviesGrid = ({ movies }) => {
 
   return (
     <Row gutter={[16, 16]} style={{ padding: '0 50px' }}>
-      {movies.map(({ id, title, releaseDate, posterPath, voteAverage }) => (
+      {movies && movies.map(({ id, title, releaseDate, posterPath, voteAverage }) => (
         <Col key={id} span={6} style={{ display: 'flex', justifyContent: 'center' }}>
           <Link href={`/movies/${id}`} passHref>
             <Card
