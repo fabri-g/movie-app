@@ -1,5 +1,5 @@
 // components/mainLayout.js
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import { useRouter } from 'next/router';
 import { Layout, Menu, Avatar } from 'antd/lib';
 import { useAuth0 } from '@auth0/auth0-react';
@@ -22,7 +22,6 @@ const MainLayout = ({ children }) => {
   const [collapsed, setCollapsed] = useState(false);
   const router = useRouter();
   const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
-  const { getAccessTokenSilently } = useAuth0();
 
   const items = [
     getItem('Home', '/', <HomeOutlined />),
