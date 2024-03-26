@@ -1,4 +1,4 @@
-// /src/api/axiosClient.js
+// /src/api/tmdb.client.js
 const axios = require('axios');
 require('dotenv').config();
 

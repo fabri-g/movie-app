@@ -1,5 +1,5 @@
 // /src/services/tmdb.js
-const axiosClient = require('../api/axiosClient');
+const axiosClient = require('../api/tmdb.client');
 
 const tmdbService = {
   fetchMovieById: async (id) => {
