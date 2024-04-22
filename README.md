@@ -4,11 +4,12 @@ This project is a comprehensive movie and TV show information platform that allo
 
 ## Features
 
-- **Movies** Explore popular, top-rated, and now playing movies.
-- **TV Shows** Discover popular, top-rated, and currently airing TV shows.
-- **Search** Use the search functionality to find movies or TV shows by title.
-- **ID Page** View more details of movies or TV shows, including comprehensive summaries, cast information, and more.
-- **Favorites** Add movies or TV shows to a favorites list for quick access.
+- **Movies:** Explore popular, top-rated, and now playing movies.
+- **TV Shows:** Discover popular, top-rated, and currently airing TV shows.
+- **Search:** Use the search functionality to find movies or TV shows by title.
+- **ID Page:** View more details of movies or TV shows, including comprehensive summaries, cast information, and more.
+- **Authentication:** Secure user authentication implemented using Auth0, allowing users to sign in with multiple identity providers (like Google, Facebook, etc.). Provides a seamless and secure login experience across different devices. 
+- **Favorites** Add movies or TV shows to a favorites list for quick access, this list is saved with your user so that you can have it on every device you log in to.
 
 ## Technologies Used
 ### Backend
@@ -21,7 +22,7 @@ This project is a comprehensive movie and TV show information platform that allo
 - **[Ant Design](https://ant.design/):** A comprehensive UI design system based on React.
 - **CSS:** Used for styling the application's frontend.
 ### Authentication
-- **[React Context](https://react.dev/reference/react/createContext):** Utilized for managing authentication state across the application.
+- **[Auth0](https://auth0.com/docs):** Utilized for managing authentication across the application and user metadata for the favorites feature.
 
 ## Getting Started
 1. Clone the repository.
@@ -33,16 +34,22 @@ This project is a comprehensive movie and TV show information platform that allo
 ## Repository Structure
 ### Backend
 Brief overview of the backend structure:
+- **api:**  Contains custom Axios instances for external API calls, simplifying the management of request configurations and headers.
+- **controllers:** Logic for handling incoming requests and returning responses.
+- **middlewares:** Includes middleware functions for Express.js, such as authentication checks.
 - **resolvers:** Contains GraphQL resolvers for fetching data from the TMDb API.
-- **schemas:** efines the GraphQL schemas for the application.
+- **routes:** Contains the route to handle user authentication. 
+- **schemas:** Defines the GraphQL schemas for the application.
+- **services:** Encapsulates the business logic of the application, making external API requests and processing data.
+- **utils:** Utility functions that provide commonly used functionality throughout the backend.
 ### Frontend
 Brief overview of the frontend structure:
 - **components:** Contains reusable UI components
-- **context:** Holds the React Context files used for managing global state across the application
+- **contexts:** Holds the React Context files used for managing global state across the application
+- **graphql:** Organized storage of GraphQL queries, facilitating easier maintenance and reuse across components.
 - **lib:** Includes utility functions and configurations, possibly for interacting with the TMDb API.
 - **pages:** Consists of components that correspond to different routes or screens in the application. 
 - **styles:** Contains CSS files for styling the application.
-- **public:** Used for static files such as images, icons, and other assets that can be publicly accessed by the browser.
 
 ## Authors
 - Fabricio Gatti - [fabri-g](https://github.com/fabri-g)

@@ -1,20 +1,9 @@
 // frontend/pages/movies/now-playing.js
 import React from 'react';
-import { gql, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import apolloClient from '../../lib/apolloClient';
 import MoviesGrid from '../../components/moviesGrid';
-
-const GET_NOWPLAYING_MOVIES = gql`
-  query GetNowPlayingMovies {
-    nowPlayingMovies {
-      id
-      title
-      releaseDate
-      posterPath
-      voteAverage
-    }
-  }
-`;
+import { GET_NOWPLAYING_MOVIES } from '../../graphql/queries/nowPlayingMoviesQuery';
 
 function NowPlayingPage() {
   const { data, loading, error } = useQuery(GET_NOWPLAYING_MOVIES, { client: apolloClient });

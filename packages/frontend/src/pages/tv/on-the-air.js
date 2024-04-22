@@ -1,20 +1,9 @@
 // frontend/pages/tv/on-the-air.js
 import React from 'react';
-import { gql, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import apolloClient from '../../lib/apolloClient';
 import TvGrid from '../../components/tvGrid';
-
-const GET_ON_THE_AIR_TV = gql`
-  query GetOnTheAirTv {
-    onTheAirTv {
-      id
-      name
-      firstAirDate
-      posterPath
-      voteAverage
-    }
-  }
-`;
+import { GET_ON_THE_AIR_TV } from '../../graphql/queries/onTheAirTvQuery';
 
 function OnTheAirPage() {
   const { data, loading, error } = useQuery(GET_ON_THE_AIR_TV, { client: apolloClient });

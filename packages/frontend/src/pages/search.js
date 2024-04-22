@@ -1,54 +1,61 @@
 import React, { useState, useEffect } from 'react';
-import { gql } from '@apollo/client';
-import { Input, Card } from 'antd/lib';
+import { Input } from 'antd/lib';
 import debounce from 'lodash.debounce';
 import apolloClient from '../lib/apolloClient';
 import MoviesGrid from '../components/moviesGrid';
-
-const { Meta } = Card;
-
-const SEARCH_MOVIES = gql`
-  query SearchMovies($title: String!) {
-    searchMovies(title: $title) {
-      id
-      title
-      releaseDate
-      posterPath
-      voteAverage
-    }
-  }
-`;
+import TvGrid from '../components/tvGrid';
+import { SEARCH_MOVIES } from '../graphql/queries/searchMoviesQuery';
+import { SEARCH_TV } from '../graphql/queries/searchTvQuery';
 
 const SearchPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [movies, setMovies] = useState([]);
+  const [tvShows, setTvShows] = useState([]);
 
   // Debounced search function
-  const debouncedSearch = debounce(async (title) => {
-    const { data } = await apolloClient.query({
-      query: SEARCH_MOVIES,
-      variables: { title },
-    });
-    setMovies(data.searchMovies);
-  }, 500); // 500ms debounce time
+  const debouncedSearch = debounce(async (query) => {
+    if (query) {
+      // Search Movies
+      const moviesResponse = await apolloClient.query({
+        query: SEARCH_MOVIES,
+        variables: { title: query },
+      });
+      setMovies(moviesResponse.data.searchMovies);
 
-  useEffect(() => {
-    if (searchTerm) {
-      debouncedSearch(searchTerm);
+      // Search TV Shows
+      const tvResponse = await apolloClient.query({
+        query: SEARCH_TV,
+        variables: { name: query },
+      });
+      setTvShows(tvResponse.data.searchTv);
     } else {
       setMovies([]);
+      setTvShows([]);
     }
+  }, 500);
+
+  useEffect(() => {
+    debouncedSearch(searchTerm);
+    // Cleanup function to cancel debounced search on component unmount
+    return () => debouncedSearch.cancel();
   }, [searchTerm]);
 
   return (
     <div>
       <Input
-        placeholder="Search..."
+        placeholder="Search for Movies or TV Shows..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         style={{ marginBottom: '20px', width: '100%' }}
       />
-      <MoviesGrid movies={movies} />
+      <div>
+        <h2>Movies</h2>
+        <MoviesGrid movies={movies} />
+      </div>
+      <div>
+        <h2>TV Shows</h2>
+        <TvGrid tv={tvShows} />
+      </div>
     </div>
   );
 };

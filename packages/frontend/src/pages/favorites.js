@@ -1,33 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { gql } from '@apollo/client';
 import apolloClient from '../lib/apolloClient';
 import MoviesGrid from '../components/moviesGrid';
 import TvGrid from '../components/tvGrid';
 import { useFavorites } from '../contexts/favoritesContext'; // Import the hook
-
-const GET_MOVIE_DETAILS = gql`
-  query GetMovieDetails($id: ID!) {
-    movie(id: $id) {
-      id
-      title
-      releaseDate
-      posterPath
-      voteAverage
-    }
-  }
-`;
-
-const GET_TV_DETAILS = gql`
-  query GetTvDetails($id: ID!) {
-    tv(id: $id) {
-      id
-      name
-      firstAirDate
-      posterPath
-      voteAverage
-    }
-  }
-`;
+import { GET_MOVIE_DETAILS } from '../graphql/queries/movieDetailsQuery';
+import { GET_TV_DETAILS } from '../graphql/queries/tvDetailsQuery';
 
 const FavouritesPage = () => {
   const { favorites } = useFavorites();
